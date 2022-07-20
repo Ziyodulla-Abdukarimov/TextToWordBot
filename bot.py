@@ -5,10 +5,17 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from module import word
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import os
+from config import API_TOKEN, admin_id
+import sqlite3
+conn = sqlite3.connect('db.db', check_same_thread=False)
+cursor = conn.cursor()
+
+def db_table_val(user_id: int, user_name: str, user_surname: str, username: str):
+	cursor.execute('INSERT INTO test (user_id, user_name, user_surname, username) VALUES (?, ?, ?, ?)', (user_id, user_name, user_surname, username))
+	conn.commit()
 
 logging.basicConfig(level=logging.DEBUG)
 
-API_TOKEN = '5403184577:AAFG_LLYYx7sDdKpp61fhSVhR7fEW7hqaGY'
 
 bot = Bot(token=API_TOKEN)
 
@@ -21,8 +28,12 @@ class File_send(StatesGroup):
 @dp.message_handler(commands=['start'])
 async def welcome(message: types.Message):
     await message.reply("""Assalomu aleykum bo\'timizga xush kelibsiz. \nBu bot orqali siz Word file yaratishingiz mumkin.:)\n 
-    word yaratish uchun /file
-    """)
+    word yaratish uchun /file""")
+    us_id = message.from_user.id
+    us_name = message.from_user.first_name
+    us_sname = message.from_user.last_name
+    username = message.from_user.username
+    db_table_val(user_id=us_id, user_name=us_name, user_surname=us_sname, username=username)
 
 @dp.message_handler(commands = 'file', state="*")
 async def fileinfo(message: types.Message):
