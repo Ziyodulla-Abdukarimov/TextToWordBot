@@ -10,20 +10,24 @@ import sqlite3
 conn = sqlite3.connect('db.db', check_same_thread=False)
 cursor = conn.cursor()
 
-def db_table_val(user_id: int, user_name: str, user_surname: str, username: str):
-	cursor.execute('INSERT INTO test (user_id, user_name, user_surname, username) VALUES (?, ?, ?, ?)', (user_id, user_name, user_surname, username))
-	conn.commit()
 
-logging.basicConfig(level=logging.DEBUG)
+def db_table_val(user_id: int, user_name: str, user_surname: str, username: str):
+    cursor.execute('INSERT INTO test (user_id, user_name, user_surname, username) VALUES (?, ?, ?, ?)',
+                   (user_id, user_name, user_surname, username))
+    conn.commit()
+
+# logging.basicConfig(level=logging.DEBUG)
 
 
 bot = Bot(token=API_TOKEN)
 
 dp = Dispatcher(bot, storage=MemoryStorage())
 
+
 class File_send(StatesGroup):
     title = State()
-    body =  State()
+    body = State()
+
 
 @dp.message_handler(commands=['start'])
 async def welcome(message: types.Message):
@@ -33,15 +37,18 @@ async def welcome(message: types.Message):
     us_name = message.from_user.first_name
     us_sname = message.from_user.last_name
     username = message.from_user.username
-    db_table_val(user_id=us_id, user_name=us_name, user_surname=us_sname, username=username)
+    db_table_val(user_id=us_id, user_name=us_name,
+                 user_surname=us_sname, username=username)
 
-@dp.message_handler(commands = 'file', state="*")
+
+@dp.message_handler(commands='file', state="*")
 async def fileinfo(message: types.Message):
     await message.answer('Mavzuni kiriting')
     await File_send.title.set()
 
+
 @dp.message_handler(state=File_send.title)
-async def filebody(message : types.Message, state = FSMContext):
+async def filebody(message: types.Message, state=FSMContext):
     title = message.text
     await state.update_data(title=title)
     await message.answer("Matn kiriting")
