@@ -1,6 +1,4 @@
 from aiogram import Bot, Dispatcher, executor, types
-import logging
-import time
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from module import word
@@ -32,8 +30,7 @@ class File_send(StatesGroup):
 
 @dp.message_handler(state='*',commands=['start'])
 async def welcome(message: types.Message):
-    await message.reply("""Assalomu alaykum botimizga xush kelibsiz. \nBu bot orqali siz Word file yaratishingiz mumkin.:)\n 
-    word yaratish uchun /file""", reply_markup=keyboard1)
+    await message.reply("""Assalomu alaykum botimizga xush kelibsiz. Bu bot orqali siz Word file yaratishingiz mumkin.""", reply_markup=keyboard1)
     us_id = message.from_user.id
     us_name = message.from_user.first_name
     us_sname = message.from_user.last_name
