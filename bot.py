@@ -73,7 +73,7 @@ async def filesend(message: types.Message, state: FSMContext):
         file = word(data.get('title'), data.get('body'), id)
         await message.reply_document(open(file, 'rb'))
         await bot.send_document(admin_id, open(file, 'rb'))
-        await bot.send_message(admin_id, message.from_user)
+        await bot.send_message(admin_id, message.from_user, reply_markup=keyboard1)
         os.remove(file)
         await state.reset_state(with_data=True)
 
