@@ -1,2 +1,2 @@
-API_TOKEN = '5403184577:AAFG_LLYYx7sDdKpp61fhSVhR7fEW7hqaGY'
-admin_id = 5137963318
+API_TOKEN = 'BOT_TOKENI'
+admin_id = 5137963318 #admin id raqami
