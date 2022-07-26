@@ -1,3 +1,4 @@
+from reply_keyboard import keyboard1, keyboard2
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -8,7 +9,7 @@ from config import API_TOKEN, admin_id
 import sqlite3
 conn = sqlite3.connect('db.db', check_same_thread=False)
 cursor = conn.cursor()
-from reply_keyboard import keyboard1, keyboard2
+
 
 def db_table_val(user_id: int, user_name: str, user_surname: str, username: str):
     cursor.execute('INSERT INTO test (user_id, user_name, user_surname, username) VALUES (?, ?, ?, ?)',
@@ -28,7 +29,7 @@ class File_send(StatesGroup):
     body = State()
 
 
-@dp.message_handler(state='*',commands=['start'])
+@dp.message_handler(state='*', commands=['start'])
 async def welcome(message: types.Message):
     await message.reply("""Assalomu alaykum botimizga xush kelibsiz. Bu bot orqali siz Word file yaratishingiz mumkin.""", reply_markup=keyboard1)
     us_id = message.from_user.id
@@ -38,6 +39,7 @@ async def welcome(message: types.Message):
     db_table_val(user_id=us_id, user_name=us_name,
                  user_surname=us_sname, username=username)
 
+
 @dp.message_handler()
 async def keyboard_answer(message: types.Message):
     if message.text == 'Word yaratish':
@@ -45,7 +47,6 @@ async def keyboard_answer(message: types.Message):
         await File_send.title.set()
     elif message.text == 'Admin':
         await message.answer('Bot yaratuvchisi: @Ziyodulla')
-
 
 
 @dp.message_handler(state=File_send.title)
